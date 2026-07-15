@@ -11,21 +11,15 @@ jobs:
     name: Semgrep Scan
     runs-on: ubuntu-latest
 
-    # Skip scanning if the commit only changes documentation
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
-
     steps:
-      # Step 1: Check out the repository code
+      # Step 1: Check out your code
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Step 2: Run Semgrep
-      - name: Run Semgrep SAST
-        uses: semgrep/semgrep-action@v1
-        with:
-          config: >-
-            p/default
-            p/javascript
-        env:
-          # This tells Semgrep to fail the build if it finds high-severity vulnerabilities
-          SEMGREP_RULES: 'p/default'
+      # Step 2: Install Semgrep CLI directly (skips the buggy GitHub integration wrapper)
+      - name: Install Semgrep
+        run: pipx install semgrep
+
+      # Step 3: Run the scan and print results directly to the GitHub console
+      - name: Run Semgrep Scan
+        run: semgrep scan --config p/javascript --config p/default --error
