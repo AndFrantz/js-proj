@@ -10,6 +10,7 @@ permissions:
   contents: read
   artifact-metadata: write
   actions: read
+  security-events: write
 
 jobs:
   semgrep:
