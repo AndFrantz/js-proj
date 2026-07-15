@@ -14,7 +14,7 @@ jobs:
     steps:
       # Step 1: Check out your code
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@596e973719c935950f1a0de8d7a62df43fc408a1
 
       # Step 2: Install Semgrep CLI directly (skips the buggy GitHub integration wrapper)
       - name: Install Semgrep
