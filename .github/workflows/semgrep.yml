@@ -23,3 +23,11 @@ jobs:
       # Step 3: Run the scan and print results directly to the GitHub console
       - name: Run Semgrep Scan
         run: semgrep scan --config p/javascript --config p/default --error --sarif
+
+
+      #step 4: drop sarif scan results into GitHub      
+      - name: Upload Scan Results
+        uses: github/codeql-action/upload-sarif@99df26d4f13ea111d4ec1a7dddef6063f76b97e9 #4.37.0
+        if: always()
+        with:
+          sarif_file: results.sarif
