@@ -1,0 +1,38 @@
+name: Security Scan (SAST)
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+permissions:
+  contents: read
+  artifact-metadata: write
+  actions: read
+
+jobs:
+  semgrep:
+    name: Semgrep Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out your code
+      - name: Checkout Code
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # Update this to match GitHub Actions Version Tag ie https://github.com/actions/checkout/commit/08eba0b27e820071cde6df949e0beb9ba4906955
+
+      # Step 2: Install Semgrep CLI directly (skips the buggy GitHub integration wrapper)
+      - name: Install Semgrep
+        run: pipx install semgrep
+
+      # Step 3: Run the scan
+      - name: Run Semgrep Scan
+        run: semgrep scan --config p/javascript --config p/default --error --sarif-output=results.sarif
+
+
+      #step 4: drop sarif scan results into GitHub      
+      - name: Upload Scan Results
+        uses: github/codeql-action/upload-sarif@99df26d4f13ea111d4ec1a7dddef6063f76b97e9 #4.37.0
+        if: always()
+        with:
+          sarif_file: results.sarif
