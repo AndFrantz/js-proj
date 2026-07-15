@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ "main", "master" ]
 
+permissions:
+  artifact-metadata: write
+  actions: read
+
 jobs:
   semgrep:
     name: Semgrep Scan
