@@ -22,4 +22,4 @@ jobs:
 
       # Step 3: Run the scan and print results directly to the GitHub console
       - name: Run Semgrep Scan
-        run: semgrep scan --config p/javascript --config p/default --error
+        run: semgrep scan --config p/javascript --config p/default --error --sarif
