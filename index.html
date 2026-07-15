@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS & AppSec Playground</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #wall {
+            margin-top: 20px;
+            padding: 10px;
+            background: #eee;
+            border-radius: 4px;
+            min-height: 50px;
+        }
+        .comment {
+            background: white;
+            padding: 8px;
+            margin-bottom: 8px;
+            border-left: 4px solid #007bff;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>The Comment Wall</h2>
+    <p>Type something below to add it to the wall.</p>
+    
+    <input type="text" id="userInput" placeholder="Type a comment...">
+    <button id="submitBtn">Post</button>
+
+    <h3>Wall Posts:</h3>
+    <div id="wall"></div>
+</div>
+
+<script>
+    // 1. Grab our HTML elements using the DOM
+    const submitBtn = document.getElementById('submitBtn');
+    const userInput = document.getElementById('userInput');
+    const wall = document.getElementById('wall');
+
+    // 2. Add an event listener to handle the click
+    submitBtn.addEventListener('click', function() {
+        const text = userInput.value;
+        
+        if (text.trim() === "") return; // Don't post empty comments
+
+        // Create a new div wrapper for the comment
+        const newComment = document.createElement('div');
+        newComment.classList.add('comment');
+
+        // --- VULNERABLE APPROACH (AppSec Lesson 1) ---
+        // Using innerHTML allows the browser to render HTML tags typed by the user.
+        newComment.innerHTML = text; 
+
+        // --- SECURE APPROACH ---
+        // Uncomment the line below and comment out the innerHTML line to fix the bug!
+        // newComment.textContent = text;
+
+        // 3. Append the new comment to our wall
+        wall.appendChild(newComment);
+
+        // Clear the input box
+        userInput.value = "";
+    });
+</script>
+
+</body>

@@ -1,0 +1,31 @@
+name: Security Scan (SAST)
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  semgrep:
+    name: Semgrep Scan
+    runs-on: ubuntu-latest
+
+    # Skip scanning if the commit only changes documentation
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+
+    steps:
+      # Step 1: Check out the repository code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Run Semgrep
+      - name: Run Semgrep SAST
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: >-
+            p/default
+            p/javascript
+        env:
+          # This tells Semgrep to fail the build if it finds high-severity vulnerabilities
+          SEMGREP_RULES: 'p/default'
